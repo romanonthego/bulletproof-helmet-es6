@@ -34,11 +34,34 @@ export default class BulletproofHelmet extends PureComponent {
     themeColor: PropTypes.string,
     googleSiteVerification: PropTypes.string,
     yandexVerification: PropTypes.string,
+    facebookAdmins: PropTypes.string,
+    facebookAppId: PropTypes.string,
 
     // support native helmet attributes
     link: PropTypes.array,
     script: PropTypes.array,
     meta: PropTypes.array,
+
+    // socials
+    openGraph: PropTypes.shape({
+      title: PropTypes.string,
+      description: PropTypes.string,
+      image: PropTypes.string,
+      imageWidth: PropTypes.number,
+      imageHeight: PropTypes.number,
+      type: PropTypes.string,
+      // url: PropTypes.string,
+      siteName: PropTypes.string,
+    }),
+
+    twitterCard: PropTypes.shape({
+      cardType: PropTypes.string, //'summary_large_image',
+      title: PropTypes.string,
+      description: PropTypes.string,
+      image: PropTypes.image,
+      siteHandler: PropTypes.string,
+      creatorHandler: PropTypes.string,
+    }),
   }
 
   buildMeta() {
@@ -51,14 +74,70 @@ export default class BulletproofHelmet extends PureComponent {
       yandexVerification,
     } = this.props
 
-    return {
+    return [
       {name: 'description', content: description},
-      ...(tileColor ? {name: 'msapplication-TileColor', content: tileColor} : {}),
-      ...(tileImage ? {name: 'msapplication-TileImage', content: tileImage} : {}),
-      ...(themeColor ? {name: 'theme-color', content: themeColor} : {}),
-      ...(googleSiteVerification ? {name: 'google-site-verification', content: `${googleSiteVerification}`} : {}),
-      ...(yandexVerification ? {name: 'yandex-verification', content: `${yandexVerification}`} : {}),
+      (tileColor ? {name: 'msapplication-TileColor', content: tileColor} : null),
+      (tileImage ? {name: 'msapplication-TileImage', content: tileImage} : null),
+      (themeColor ? {name: 'theme-color', content: themeColor} : null),
+      (googleSiteVerification ? {name: 'google-site-verification', content: `${googleSiteVerification}`} : null),
+      (yandexVerification ? {name: 'yandex-verification', content: `${yandexVerification}`} : null),
+      ...this.buildOpenGraph(),
+      ...this.buildTwitterCard(),
+    ].filter(meta => meta !== null)
+  }
+
+  buildTwitterCard() {
+    const {
+      twitterCard: {
+        cardType = 'summary_large_image'
+        title
+        description
+        image
+        siteHandler
+        creatorHandler
+      }
+    } = this.props
+
+    if (!this.props.title || !this.props.description) {
+      return []
     }
+
+    return [
+      {name: 'twitter:title', content: title || this.props.title},
+      {name: 'twitter:card', content: cardType},
+      {name: 'twitter:description': content: description || this.props.description},
+      {name: 'twitter:image', content: image || this.props.image},
+      (siteHandler ? {name: 'twitter:site', content: siteHandler} : null),
+      {creatorHandler ? {name: 'twitter:creator', content: creatorHandler}: null},
+    ]
+  }
+
+  buildOpenGraph() {
+    const {
+      openGraph: {
+        title,
+        description,
+        image,
+        imageWidth = 1200,
+        imageHeight = 630,
+        type = 'article',
+        siteName,
+      }
+    } = this.props
+
+    if (!this.props.title || !this.props.description) {
+      return []
+    }
+
+    return [
+      {name: 'og:title', content: title || this.props.title},
+      {name: 'og:description', content: description || this.props.description},
+      {name: 'og:image', content: image || this.props.image},
+      {name: 'og:image:width', content: imageWidth},
+      {name: 'og:image:height', content: imageHeight},
+      {name: 'og:type', content: type},
+      (siteName ? {name: 'og:site_name', content: siteName} : null),
+    ]
   }
 
   buildLink() {
@@ -94,10 +173,10 @@ export default class BulletproofHelmet extends PureComponent {
     const {chromeIconsRoot} = this.props
 
     return [
-      {rel: 'icon', type: 'image/png', href: `${chromeIconsRoot}/favicons/favicon-32x32.png`, sizes: '32x32'},
-      {rel: 'icon', type: 'image/png', href: `${chromeIconsRoot}/favicons/android-chrome-192x192.png`, sizes: '192x192'},
-      {rel: 'icon', type: 'image/png', href: `${chromeIconsRoot}/favicons/favicon-96x96.png`, sizes: '96x96'},
-      {rel: 'icon', type: 'image/png', href: `${chromeIconsRoot}/favicons/favicon-16x16.png`, sizes: '16x16'},
+      {rel: 'icon', type: 'image/png', sizes: '32x32',   href: `${chromeIconsRoot}/favicons/favicon-32x32.png`},
+      {rel: 'icon', type: 'image/png', sizes: '192x192', href: `${chromeIconsRoot}/favicons/android-chrome-192x192.png`},
+      {rel: 'icon', type: 'image/png', sizes: '96x96', href: `${chromeIconsRoot}/favicons/favicon-96x96.png`},
+      {rel: 'icon', type: 'image/png', sizes: '16x16', href: `${chromeIconsRoot}/favicons/favicon-16x16.png`},
     ]
   }
 
@@ -110,10 +189,10 @@ export default class BulletproofHelmet extends PureComponent {
     } = this.props
 
     return [
-      ...(company ? this.composeSchema('company', this.companySchema()) : []),
-      ...(website ? this.composeSchema('website', this.websiteSchema()) : []),
+      (company ? this.composeSchema('company', this.companySchema()) : null),
+      (website ? this.composeSchema('website', this.websiteSchema()) : null),
       ...schemas,
-    ]
+    ].filter(schema => schema !== null)
   }
 
   composeSchema(name, content) {
