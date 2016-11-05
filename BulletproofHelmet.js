@@ -5,7 +5,7 @@ export default class BulletproofHelmet extends PureComponent {
   static propTypes = {
     // baseURL: PropTypes.string.isRequired,
     title: PropTypes.string,
-    description: PropTypes.string,
+    description: PropTypes.string.isRequired,
     image: React.PropTypes.string,
     url: React.PropTypes.string,
 
@@ -62,6 +62,18 @@ export default class BulletproofHelmet extends PureComponent {
       siteHandler: PropTypes.string,
       creatorHandler: PropTypes.string,
     }),
+
+    // default Helmet props
+    meta: PropTypes.array,
+    script: PropTypes.array,
+    link: PropTypes.array,
+  }
+
+  static defaultProps = {
+    meta: [],
+    script: [],
+    link: [],
+    schemas: [],
   }
 
   buildMeta() {
@@ -95,7 +107,7 @@ export default class BulletproofHelmet extends PureComponent {
         image,
         siteHandler,
         creatorHandler,
-      },
+      } = {},
     } = this.props
 
     if (!this.props.title || !this.props.description) {
@@ -122,7 +134,7 @@ export default class BulletproofHelmet extends PureComponent {
         imageHeight = 630,
         type = 'article',
         siteName,
-      },
+      } = {},
     } = this.props
 
     if (!this.props.title || !this.props.description) {
@@ -278,18 +290,20 @@ export default class BulletproofHelmet extends PureComponent {
     const composedProps = {
       title,
       meta: [
-        this.buildMeta(),
+        ...this.buildMeta(),
         ...meta,
       ],
       script: [
-        this.buildScript(),
+        ...this.buildScript(),
         ...script,
       ],
       link: [
-        this.buildLink(),
+        ...this.buildLink(),
         ...link,
       ],
     }
+
+    console.log(composedProps)
 
     return (
       <Helmet {...composedProps} {...otherProps} />
