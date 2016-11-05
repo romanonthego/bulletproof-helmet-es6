@@ -110,15 +110,12 @@ export default class BulletproofHelmet extends PureComponent {
       } = {},
     } = this.props
 
-    if (!this.props.title || !this.props.description) {
-      return []
-    }
-
     return [
-      {name: 'twitter:title', content: title || this.props.title},
+      (title || this.props.title ? {name: 'twitter:title', content: title || this.props.title} : null),
       {name: 'twitter:card', content: cardType},
-      {name: 'twitter:description', content: description || this.props.description},
-      {name: 'twitter:image', content: image || this.props.image},
+      (description || this.props.description ?
+        {name: 'twitter:description', content: description || this.props.description} : null),
+      (image || this.props.image ? {name: 'twitter:image', content: image || this.props.image} : null),
       (siteHandler ? {name: 'twitter:site', content: siteHandler} : null),
       (creatorHandler ? {name: 'twitter:creator', content: creatorHandler}: null),
     ]
@@ -137,16 +134,13 @@ export default class BulletproofHelmet extends PureComponent {
       } = {},
     } = this.props
 
-    if (!this.props.title || !this.props.description) {
-      return []
-    }
-
     return [
-      {name: 'og:title', content: title || this.props.title},
-      {name: 'og:description', content: description || this.props.description},
-      {name: 'og:image', content: image || this.props.image},
-      {name: 'og:image:width', content: imageWidth},
-      {name: 'og:image:height', content: imageHeight},
+      (title || this.props.title ? {name: 'og:title', content: title || this.props.title} : null),
+      (description || this.props.description ?
+        {name: 'og:description', content: description || this.props.description} : null),
+      (image || this.props.image ? {name: 'og:image', content: image || this.props.image} : null),
+      (image || this.props.image ? {name: 'og:image:width', content: imageWidth} : null),
+      (image || this.props.image ? {name: 'og:image:height', content: imageHeight} : null),
       {name: 'og:type', content: type},
       (siteName ? {name: 'og:site_name', content: siteName} : null),
     ]
