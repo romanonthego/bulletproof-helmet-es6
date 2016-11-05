@@ -15,7 +15,7 @@ export default class BulletproofHelmet extends PureComponent {
       name: PropTypes.string.isRequired,
       alternateName: PropTypes.string,
       url: PropTypes.string.isRequired,
-    })
+    }),
     company: PropTypes.shape({
       name: PropTypes.string.isRequired,
       url: PropTypes.string.isRequired,
@@ -55,7 +55,7 @@ export default class BulletproofHelmet extends PureComponent {
     }),
 
     twitterCard: PropTypes.shape({
-      cardType: PropTypes.string, //'summary_large_image',
+      cardType: PropTypes.string, // 'summary_large_image',
       title: PropTypes.string,
       description: PropTypes.string,
       image: PropTypes.image,
@@ -89,13 +89,13 @@ export default class BulletproofHelmet extends PureComponent {
   buildTwitterCard() {
     const {
       twitterCard: {
-        cardType = 'summary_large_image'
-        title
-        description
-        image
-        siteHandler
-        creatorHandler
-      }
+        cardType = 'summary_large_image',
+        title,
+        description,
+        image,
+        siteHandler,
+        creatorHandler,
+      },
     } = this.props
 
     if (!this.props.title || !this.props.description) {
@@ -105,10 +105,10 @@ export default class BulletproofHelmet extends PureComponent {
     return [
       {name: 'twitter:title', content: title || this.props.title},
       {name: 'twitter:card', content: cardType},
-      {name: 'twitter:description': content: description || this.props.description},
+      {name: 'twitter:description', content: description || this.props.description},
       {name: 'twitter:image', content: image || this.props.image},
       (siteHandler ? {name: 'twitter:site', content: siteHandler} : null),
-      {creatorHandler ? {name: 'twitter:creator', content: creatorHandler}: null},
+      (creatorHandler ? {name: 'twitter:creator', content: creatorHandler}: null),
     ]
   }
 
@@ -122,7 +122,7 @@ export default class BulletproofHelmet extends PureComponent {
         imageHeight = 630,
         type = 'article',
         siteName,
-      }
+      },
     } = this.props
 
     if (!this.props.title || !this.props.description) {
@@ -144,6 +144,7 @@ export default class BulletproofHelmet extends PureComponent {
     const {
       appleTouchIconsRoot,
       chromeIconsRoot,
+      faviconsManifestUrl,
     } = this.props
 
     return [
@@ -154,32 +155,35 @@ export default class BulletproofHelmet extends PureComponent {
   }
 
   buildAppleTouchIcons() {
-    const {appleTouchIconsRoot} = this.props
+    const {
+      appleTouchIconsRoot,
+    } = this.props
 
     return [
-      {rel: 'apple-touch-icon', sizes: '57x57', href: `${appleTouchIconRoot}/favicons/apple-touch-icon-57x57.png`},
-      {rel: 'apple-touch-icon', sizes: '60x60', href: `${appleTouchIconRoot}/favicons/apple-touch-icon-60x60.png`},
-      {rel: 'apple-touch-icon', sizes: '72x72', href: `${appleTouchIconRoot}/favicons/apple-touch-icon-72x72.png`},
-      {rel: 'apple-touch-icon', sizes: '76x76', href: `${appleTouchIconRoot}/favicons/apple-touch-icon-76x76.png`},
-      {rel: 'apple-touch-icon', sizes: '114x114', href: `${appleTouchIconRoot}/favicons/apple-touch-icon-114x114.png`},
-      {rel: 'apple-touch-icon', sizes: '120x120', href: `${appleTouchIconRoot}/favicons/apple-touch-icon-120x120.png`},
-      {rel: 'apple-touch-icon', sizes: '144x144', href: `${appleTouchIconRoot}/favicons/apple-touch-icon-144x144.png`},
-      {rel: 'apple-touch-icon', sizes: '152x152', href: `${appleTouchIconRoot}/favicons/apple-touch-icon-152x152.png`},
-      {rel: 'apple-touch-icon', sizes: '180x180', href: `${appleTouchIconRoot}/favicons/apple-touch-icon-180x180.png`},
+      {rel: 'apple-touch-icon', sizes: '57x57', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-57x57.png`},
+      {rel: 'apple-touch-icon', sizes: '60x60', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-60x60.png`},
+      {rel: 'apple-touch-icon', sizes: '72x72', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-72x72.png`},
+      {rel: 'apple-touch-icon', sizes: '76x76', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-76x76.png`},
+      {rel: 'apple-touch-icon', sizes: '114x114', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-114x114.png`},
+      {rel: 'apple-touch-icon', sizes: '120x120', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-120x120.png`},
+      {rel: 'apple-touch-icon', sizes: '144x144', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-144x144.png`},
+      {rel: 'apple-touch-icon', sizes: '152x152', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-152x152.png`},
+      {rel: 'apple-touch-icon', sizes: '180x180', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-180x180.png`},
     ]
-  },
+  }
 
   buildChromeIcons() {
-    const {chromeIconsRoot} = this.props
+    const {
+      chromeIconsRoot,
+    } = this.props
 
     return [
-      {rel: 'icon', type: 'image/png', sizes: '32x32',   href: `${chromeIconsRoot}/favicons/favicon-32x32.png`},
+      {rel: 'icon', type: 'image/png', sizes: '32x32', href: `${chromeIconsRoot}/favicons/favicon-32x32.png`},
       {rel: 'icon', type: 'image/png', sizes: '192x192', href: `${chromeIconsRoot}/favicons/android-chrome-192x192.png`},
       {rel: 'icon', type: 'image/png', sizes: '96x96', href: `${chromeIconsRoot}/favicons/favicon-96x96.png`},
       {rel: 'icon', type: 'image/png', sizes: '16x16', href: `${chromeIconsRoot}/favicons/favicon-16x16.png`},
     ]
   }
-
 
   buildScript() {
     const {
@@ -210,8 +214,9 @@ export default class BulletproofHelmet extends PureComponent {
         url,
         logo,
         sameAs = [],
-      }
-    }
+      },
+    } = this.props
+
     return `
       {
         "@context": "http://schema.org",
@@ -251,7 +256,7 @@ export default class BulletproofHelmet extends PureComponent {
       meta,
       script,
       link,
-      title,
+      /* eslint-disable no-unused-vars */
       description,
       image,
       url,
@@ -266,7 +271,8 @@ export default class BulletproofHelmet extends PureComponent {
       themeColor,
       googleSiteVerification,
       yandexVerification,
-      ...otherProps,
+      /* eslint-enable no-unused-vars */
+      ...otherProps
     } = this.props
 
     const composedProps = {
@@ -276,11 +282,11 @@ export default class BulletproofHelmet extends PureComponent {
         ...meta,
       ],
       script: [
-        this.buildScript()
+        this.buildScript(),
         ...script,
       ],
       link: [
-        this.buildLink()
+        this.buildLink(),
         ...link,
       ],
     }
