@@ -17,6 +17,7 @@ export default class BulletproofHelmet extends PureComponent {
       name: PropTypes.string.isRequired,
       alternateName: PropTypes.string,
       url: PropTypes.string.isRequired,
+      searchUrl: PropTypes.string,
     }),
     company: PropTypes.shape({
       name: PropTypes.string.isRequired,
