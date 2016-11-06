@@ -1,5 +1,7 @@
 import React, {PureComponent, PropTypes} from 'react'
 import Helmet from 'react-helmet'
+import companySchema from './utils/schemas/company'
+import websiteSchema from './utils/schemas/website'
 
 export default class BulletproofHelmet extends PureComponent {
   static propTypes = {
@@ -69,6 +71,8 @@ export default class BulletproofHelmet extends PureComponent {
     link: PropTypes.array,
   }
 
+  // default arrays of props.
+  // needed for destructuring into props that passed down
   static defaultProps = {
     meta: [],
     script: [],
@@ -136,8 +140,7 @@ export default class BulletproofHelmet extends PureComponent {
 
     return [
       (title || this.props.title ? {name: 'og:title', content: title || this.props.title} : null),
-      (description || this.props.description ?
-        {name: 'og:description', content: description || this.props.description} : null),
+      (description || this.props.description ? {name: 'og:description', content: description || this.props.description} : null),
       (image || this.props.image ? {name: 'og:image', content: image || this.props.image} : null),
       (image || this.props.image ? {name: 'og:image:width', content: imageWidth} : null),
       (image || this.props.image ? {name: 'og:image:height', content: imageHeight} : null),
@@ -156,8 +159,8 @@ export default class BulletproofHelmet extends PureComponent {
     return [
       ...(appleTouchIconsRoot ? this.buildAppleTouchIcons : []),
       ...(chromeIconsRoot ? this.buildChromeIcons : []),
-      ...(faviconsManifestUrl ? [{rel: 'manifest', href: `${faviconsManifestUrl}`}] : []),
-    ]
+      (faviconsManifestUrl ? {rel: 'manifest', href: `${faviconsManifestUrl}`} : null),
+    ].filter(l => l !== null)
   }
 
   buildAppleTouchIcons() {
@@ -165,17 +168,23 @@ export default class BulletproofHelmet extends PureComponent {
       appleTouchIconsRoot,
     } = this.props
 
-    return [
-      {rel: 'apple-touch-icon', sizes: '57x57', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-57x57.png`},
-      {rel: 'apple-touch-icon', sizes: '60x60', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-60x60.png`},
-      {rel: 'apple-touch-icon', sizes: '72x72', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-72x72.png`},
-      {rel: 'apple-touch-icon', sizes: '76x76', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-76x76.png`},
-      {rel: 'apple-touch-icon', sizes: '114x114', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-114x114.png`},
-      {rel: 'apple-touch-icon', sizes: '120x120', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-120x120.png`},
-      {rel: 'apple-touch-icon', sizes: '144x144', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-144x144.png`},
-      {rel: 'apple-touch-icon', sizes: '152x152', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-152x152.png`},
-      {rel: 'apple-touch-icon', sizes: '180x180', href: `${appleTouchIconsRoot}/favicons/apple-touch-icon-180x180.png`},
+    const sizesList = [
+      '57x57',
+      '60x60',
+      '72x72',
+      '76x76',
+      '114x114',
+      '120x120',
+      '144x144',
+      '152x152',
+      '180x180',
     ]
+
+    return sizesList.map(s => ({
+      rel: 'apple-touch-icon',
+      sizes: s,
+      href: `${appleTouchIconsRoot}/apple-touch-icon-${s}.png`
+    }))
   }
 
   buildChromeIcons() {
@@ -184,10 +193,10 @@ export default class BulletproofHelmet extends PureComponent {
     } = this.props
 
     return [
-      {rel: 'icon', type: 'image/png', sizes: '32x32', href: `${chromeIconsRoot}/favicons/favicon-32x32.png`},
-      {rel: 'icon', type: 'image/png', sizes: '192x192', href: `${chromeIconsRoot}/favicons/android-chrome-192x192.png`},
-      {rel: 'icon', type: 'image/png', sizes: '96x96', href: `${chromeIconsRoot}/favicons/favicon-96x96.png`},
-      {rel: 'icon', type: 'image/png', sizes: '16x16', href: `${chromeIconsRoot}/favicons/favicon-16x16.png`},
+      {rel: 'icon', type: 'image/png', sizes: '16x16', href: `${chromeIconsRoot}/favicon-16x16.png`},
+      {rel: 'icon', type: 'image/png', sizes: '32x32', href: `${chromeIconsRoot}/favicon-32x32.png`},
+      {rel: 'icon', type: 'image/png', sizes: '96x96', href: `${chromeIconsRoot}/favicon-96x96.png`},
+      {rel: 'icon', type: 'image/png', sizes: '192x192', href: `${chromeIconsRoot}/android-chrome-192x192.png`},
     ]
   }
 
@@ -199,60 +208,10 @@ export default class BulletproofHelmet extends PureComponent {
     } = this.props
 
     return [
-      (company ? this.composeSchema('company', this.companySchema()) : null),
-      (website ? this.composeSchema('website', this.websiteSchema()) : null),
+      (company ? companySchema(company) : null),
+      (website ? websiteSchema(website) : null),
       ...schemas,
     ].filter(schema => schema !== null)
-  }
-
-  composeSchema(name, content) {
-    return {
-      name,
-      type: 'application/ld+json',
-      innerHTML: content,
-    }
-  }
-
-  companySchema() {
-    const {
-      company: {
-        name,
-        url,
-        logo,
-        sameAs = [],
-      },
-    } = this.props
-
-    return `
-      {
-        "@context": "http://schema.org",
-        "@type": "Organization",
-        "name": "${name}",
-        "url": "${url}",
-        "logo": "${logo}",
-        "sameAs" : [${sameAs.map(s => `"${s}"`).join(', ')}]
-      }
-    `
-  }
-
-  websiteSchema() {
-    const {
-      website: {
-        name,
-        alternateName,
-        url,
-      },
-    } = this.props
-
-    return `
-      {
-        "@context" : "http://schema.org",
-        "@type" : "WebSite",
-        "name" : "${name}",
-        "alternateName" : "${alternateName}",
-        "url" : "${url}"
-      }
-    `
   }
 
   render() {
@@ -296,8 +255,6 @@ export default class BulletproofHelmet extends PureComponent {
         ...link,
       ],
     }
-
-    console.log(composedProps)
 
     return (
       <Helmet {...composedProps} {...otherProps} />
