@@ -1,5 +1,6 @@
 import React, {PureComponent, PropTypes} from 'react'
 import Helmet from 'react-helmet'
+import metaOrNull from '.utils/metaOrNull'
 import companySchema from './utils/schemas/company'
 import websiteSchema from './utils/schemas/website'
 
@@ -92,12 +93,12 @@ export default class BulletproofHelmet extends PureComponent {
     } = this.props
 
     return [
-      {name: 'description', content: description},
-      (tileColor ? {name: 'msapplication-TileColor', content: tileColor} : null),
-      (tileImage ? {name: 'msapplication-TileImage', content: tileImage} : null),
-      (themeColor ? {name: 'theme-color', content: themeColor} : null),
-      (googleSiteVerification ? {name: 'google-site-verification', content: `${googleSiteVerification}`} : null),
-      (yandexVerification ? {name: 'yandex-verification', content: `${yandexVerification}`} : null),
+      metaOrNull('description', description),
+      metaOrNull('msapplication-TileImage', tileImage),
+      metaOrNull('msapplication-TileColor', tileColor),
+      metaOrNull('themeColor', themeColor),
+      metaOrNull('google-site-verification', googleSiteVerification),
+      metaOrNull('yandex-verification', yandexVerification),
       ...this.buildOpenGraph(),
       ...this.buildTwitterCard(),
     ].filter(meta => meta !== null)
@@ -116,13 +117,12 @@ export default class BulletproofHelmet extends PureComponent {
     } = this.props
 
     return [
-      (title || this.props.title ? {name: 'twitter:title', content: title || this.props.title} : null),
-      {name: 'twitter:card', content: cardType},
-      (description || this.props.description ?
-        {name: 'twitter:description', content: description || this.props.description} : null),
-      (image || this.props.image ? {name: 'twitter:image', content: image || this.props.image} : null),
-      (siteHandler ? {name: 'twitter:site', content: siteHandler} : null),
-      (creatorHandler ? {name: 'twitter:creator', content: creatorHandler}: null),
+      metaOrNull('twitter:title', title || this.props.title),
+      metaOrNull('twitter:description', description || this.props.description),
+      metaOrNull('twitter:image', image || this.props.image),
+      metaOrNull('twitter:card', cardType, image || this.props.image),
+      metaOrNull('twitter:site', siteHandler),
+      metaOrNull('twitter:creator', creatorHandler),
     ]
   }
 
@@ -140,13 +140,13 @@ export default class BulletproofHelmet extends PureComponent {
     } = this.props
 
     return [
-      (title || this.props.title ? {name: 'og:title', content: title || this.props.title} : null),
-      (description || this.props.description ? {name: 'og:description', content: description || this.props.description} : null),
-      (image || this.props.image ? {name: 'og:image', content: image || this.props.image} : null),
-      (image || this.props.image ? {name: 'og:image:width', content: imageWidth} : null),
-      (image || this.props.image ? {name: 'og:image:height', content: imageHeight} : null),
-      {name: 'og:type', content: type},
-      (siteName ? {name: 'og:site_name', content: siteName} : null),
+      metaOrNull('og:title', title || this.props.title),
+      metaOrNull('og:description', description || this.props.description),
+      metaOrNull('og:image', image || this.props.image)
+      metaOrNull('og:image:width', imageWidth, image || this.props.image),
+      metaOrNull('og:image:height', imageHeight, image || this.props.image),
+      metaOrNull('og:type', type),
+      metaOrNull('og:site', siteName),
     ]
   }
 
