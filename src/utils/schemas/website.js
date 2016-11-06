@@ -5,17 +5,21 @@ export default function websiteSchema(website) {
     name,
     alternateName,
     url,
+    searchUrl,
   } = website
 
-  const content = `
-    {
-      "@context" : "http://schema.org",
-      "@type" : "WebSite",
-      "name" : "${name}",
-      ${alternateName ? `"alternateName" : "${alternateName}",` : ''}
-      "url" : "${url}"
-    }
-  `
-
-  return composeSchema('website', content)
+  return composeSchema('website', stringify({
+    '@context': 'http://schema.org',
+    '@type' : 'WebSite',
+    name,
+    url,
+    ...(alternateName ? {alternateName} : {}),
+    ...(searchUrl ? {
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${searchUrl}={search_term_string}`,
+        'query-input': 'required name=search_term_string'
+      }
+    } : {})
+  }))
 }

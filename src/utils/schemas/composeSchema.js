@@ -1,7 +1,15 @@
-export default function composeSchema(name, innerHTML) {
+export function stringify(schemaObj = {}) {
+  return JSON.stringify(schemaObj, null, '  ')
+}
+
+export default function composeSchema(type, schemaObj = {}) {
   return {
-    name,
+    name: type,
     type: 'application/ld+json',
-    innerHTML,
+    innerHTML: stringify({
+      '@context': 'http://schema.org',
+      '@type': type,
+      ...schemaObj,
+    }),
   }
 }

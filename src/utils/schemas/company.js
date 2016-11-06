@@ -8,18 +8,10 @@ export default function companySchema(company) {
     sameAs = [],
   } = company
 
-  const sameAsString = sameAs.map(s => `"${s}"`).join(', ')
-
-  const content = `
-    {
-      "@context": "http://schema.org",
-      "@type": "Organization",
-      "name": "${name}",
-      "url": "${url}",
-      ${sameAs.length ? `"sameAs" : [${sameAsString}],` : ''}
-      "logo": "${logo}"
-    }
-  `
-
-  return composeSchema('company', content)
+  return composeSchema('Organization', {
+    name,
+    url,
+    logo,
+    ...(sameAs.length ? {sameAs: sameAs.map(s => `"${s}"`).join(', ')} : {})
+  })
 }
