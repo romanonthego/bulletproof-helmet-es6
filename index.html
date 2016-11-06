@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Bulletproof React Helmet by romanonthego</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Bulletproof React Helmet</h1>
+      <h2 class="project-tagline">Cover yours &lt;head /&gt;&#39;s 99% use cases and problems</h2>
+      <a href="https://github.com/romanonthego/bulletproof-react-helmet-es6" class="btn">View on GitHub</a>
+      <a href="https://github.com/romanonthego/bulletproof-react-helmet-es6/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/romanonthego/bulletproof-react-helmet-es6/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="bulletproof-react-helmet" class="anchor" href="#bulletproof-react-helmet" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bulletproof React Helmet</h1>
+
+<p>Bulletproof version of <a href="https://github.com/nfl/react-helmet">react-helmet</a>.
+Provides tools to cover yours <code>&lt;head /&gt;</code> 99% usecases and probles.</p>
+
+<h2>
+<a id="wait-its-es6-how-shoud-i-use-it" class="anchor" href="#wait-its-es6-how-shoud-i-use-it" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Wait, it's es6! How shoud i use it?!</h2>
+
+<p>This package in written in es6 and cannot be used directly without transformation in most cases.
+This is intentional to avoid building step and support build tools, babel preset etc.
+It's expected to be bundle as any other es6 code you've use in your project despite being placed into <code>node_modules</code> directory.</p>
+
+<p>For example, in most our project we use <code>webpack</code> like this:</p>
+
+<div class="highlight highlight-source-js"><pre>  {
+    test<span class="pl-k">:</span><span class="pl-sr"> <span class="pl-pds">/</span><span class="pl-cce">\.</span>js<span class="pl-k">|</span>jsx<span class="pl-k">$</span><span class="pl-pds">/</span></span>,
+    loader<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>babel<span class="pl-pds">'</span></span>,
+    exclude<span class="pl-k">:</span><span class="pl-sr"> <span class="pl-pds">/</span>node_modules<span class="pl-pds">/</span></span>,
+  },</pre></div>
+
+<p>What you don't want to do is to exclude es6 modules:</p>
+
+<div class="highlight highlight-source-js"><pre>  {
+    test<span class="pl-k">:</span><span class="pl-sr"> <span class="pl-pds">/</span><span class="pl-cce">\.</span>js<span class="pl-k">|</span>jsx<span class="pl-k">$</span><span class="pl-pds">/</span></span>,
+    loader<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>babel<span class="pl-pds">'</span></span>,
+    exclude<span class="pl-k">:</span><span class="pl-sr"> <span class="pl-pds">/</span>node_modules(?!<span class="pl-c1">.</span><span class="pl-k">+</span>-es6)<span class="pl-pds">/</span></span>,
+  },</pre></div>
+
+<p>Done! Now any package that ends with <code>-es6</code> will be build and bundle with your project babel-loader (and any other loader for that matter - source of this package will be treated as any other project js code). And it also can be hot-reloaded, linked for development etc.</p>
+
+<p>Users of other build systems should adjust on their own, but you get the idea.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Since we are using <a href="https://github.com/nfl/react-helmet"><code>react-helmet</code></a> under the hood you could use pass any valid props to bulletproof version and expect it to work as it should.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> <span class="pl-smi">Helmet</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>bulletproof-helmet-es6<span class="pl-pds">'</span></span>
+
+<span class="pl-c">// ...</span>
+
+  <span class="pl-k">&lt;</span>Helmet title<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>...<span class="pl-pds">"</span></span> meta<span class="pl-k">=</span>{[<span class="pl-k">...</span>]} <span class="pl-k">/</span><span class="pl-k">&gt;</span></pre></div>
+
+<p>You should also use <code>react-helmet</code> to rewind sideEffects on server side, not the bulletproof version, since all props will end up there. That basicly means that you would not need to rewrite any code to handle it on server.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> <span class="pl-smi">Helmet</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>react-helmet<span class="pl-pds">'</span></span>
+
+<span class="pl-c">// ...</span>
+
+<span class="pl-k">const</span> <span class="pl-c1">head</span> <span class="pl-k">=</span> <span class="pl-smi">Helmet</span>.<span class="pl-en">rewind</span>()
+<span class="pl-k">const</span> <span class="pl-c1">headStrings</span> <span class="pl-k">=</span> {
+  title<span class="pl-k">:</span> <span class="pl-smi">head</span>.<span class="pl-c1">title</span>.<span class="pl-c1">toString</span>(),
+  meta<span class="pl-k">:</span> <span class="pl-smi">head</span>.<span class="pl-smi">meta</span>.<span class="pl-c1">toString</span>(),
+  link<span class="pl-k">:</span> <span class="pl-smi">head</span>.<span class="pl-c1">link</span>.<span class="pl-c1">toString</span>(),
+  script<span class="pl-k">:</span> <span class="pl-smi">head</span>.<span class="pl-smi">script</span>.<span class="pl-c1">toString</span>(),
+}</pre></div>
+
+<h2>
+<a id="well-then-what-does-it-do" class="anchor" href="#well-then-what-does-it-do" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Well then, what does it do?</h2>
+
+<p>Bulletproof version provides number of utils to handle your everyday need as webdeveloper.
+For most basic example providing <code>title</code>, <code>description</code> and <code>image</code> props </p>
+
+<div class="highlight highlight-source-js"><pre>  <span class="pl-k">&lt;</span>BulletproofHelmet title<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>...<span class="pl-pds">"</span></span> description<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>...<span class="pl-pds">"</span></span> image<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>image.png<span class="pl-pds">"</span></span> <span class="pl-k">/</span><span class="pl-k">&gt;</span></pre></div>
+
+<p>will yield:</p>
+
+<ul>
+<li>document title, as one can expect</li>
+<li>document description</li>
+<li>valid twitter <code>summary_large_image</code> card with image, description and title</li>
+<li>valid opengraph (facebook, pinterest, vk etc) article entry to share on social networks</li>
+</ul>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">title</span>&gt;...&lt;/<span class="pl-ent">title</span>&gt;
+
+&lt;<span class="pl-ent">meta</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>description<span class="pl-pds">"</span></span> <span class="pl-e">content</span>=<span class="pl-s"><span class="pl-pds">"</span>...<span class="pl-pds">"</span></span> <span class="pl-e">data-react-helmet</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;
+
+&lt;<span class="pl-ent">meta</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>og:title<span class="pl-pds">"</span></span> <span class="pl-e">content</span>=<span class="pl-s"><span class="pl-pds">"</span>...<span class="pl-pds">"</span></span> <span class="pl-e">data-react-helmet</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;
+&lt;<span class="pl-ent">meta</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>og:description<span class="pl-pds">"</span></span> <span class="pl-e">content</span>=<span class="pl-s"><span class="pl-pds">"</span>...<span class="pl-pds">"</span></span> <span class="pl-e">data-react-helmet</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;
+&lt;<span class="pl-ent">meta</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>og:image<span class="pl-pds">"</span></span> <span class="pl-e">content</span>=<span class="pl-s"><span class="pl-pds">"</span>image.png<span class="pl-pds">"</span></span> <span class="pl-e">data-react-helmet</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;
+&lt;<span class="pl-ent">meta</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>og:image:width<span class="pl-pds">"</span></span> <span class="pl-e">content</span>=<span class="pl-s"><span class="pl-pds">"</span>1200<span class="pl-pds">"</span></span> <span class="pl-e">data-react-helmet</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;
+&lt;<span class="pl-ent">meta</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>og:image:height<span class="pl-pds">"</span></span> <span class="pl-e">content</span>=<span class="pl-s"><span class="pl-pds">"</span>630<span class="pl-pds">"</span></span> <span class="pl-e">data-react-helmet</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;
+&lt;<span class="pl-ent">meta</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>og:type<span class="pl-pds">"</span></span> <span class="pl-e">content</span>=<span class="pl-s"><span class="pl-pds">"</span>article<span class="pl-pds">"</span></span> <span class="pl-e">data-react-helmet</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;
+
+&lt;<span class="pl-ent">meta</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>twitter:title<span class="pl-pds">"</span></span> <span class="pl-e">content</span>=<span class="pl-s"><span class="pl-pds">"</span>...<span class="pl-pds">"</span></span> <span class="pl-e">data-react-helmet</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;
+&lt;<span class="pl-ent">meta</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>twitter:card<span class="pl-pds">"</span></span> <span class="pl-e">content</span>=<span class="pl-s"><span class="pl-pds">"</span>summary_large_image<span class="pl-pds">"</span></span> <span class="pl-e">data-react-helmet</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;
+&lt;<span class="pl-ent">meta</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>twitter:description<span class="pl-pds">"</span></span> <span class="pl-e">content</span>=<span class="pl-s"><span class="pl-pds">"</span>...<span class="pl-pds">"</span></span> <span class="pl-e">data-react-helmet</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;
+&lt;<span class="pl-ent">meta</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>twitter:image<span class="pl-pds">"</span></span> <span class="pl-e">content</span>=<span class="pl-s"><span class="pl-pds">"</span>image.png<span class="pl-pds">"</span></span> <span class="pl-e">data-react-helmet</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;</pre></div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/romanonthego/bulletproof-react-helmet-es6">Bulletproof React Helmet</a> is maintained by <a href="https://github.com/romanonthego">romanonthego</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
