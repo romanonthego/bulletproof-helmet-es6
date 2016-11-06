@@ -58,8 +58,10 @@ const headStrings = {
 ```
 
 ## Well then, what does it do?
-Bulletproof version provides number of utils to handle your everyday need as webdeveloper.
-For most basic example providing `title`, `description` and `image` props 
+Bulletproof version provides number of utils to handle your everyday need as web developer.
+Let's start with basics:
+
+### Providing `title`, `description` and `image` props
 
 ```js
   <BulletproofHelmet title="..." description="..." image="image.png" />
@@ -89,3 +91,103 @@ will yield:
 <meta name="twitter:description" content="..." data-react-helmet="true">
 <meta name="twitter:image" content="image.png" data-react-helmet="true">
 ```
+
+It is expected you have provided 1200x630px image for facebook and for twitter (twitter will resize it for you). You could provide size for openGraph image, but it's both default and highly recomended.
+
+### Schema.org schemas
+[Schema.org](https://schema.org/) may not be most popular way to provide metadata, bug Google use it to show rich snipets for you, so where is no harm to use it:
+
+*react-helmet*
+```js
+<Helmet
+  script={[
+    {
+      name: 'company',
+      type: 'application/ld+json',
+      innerHTML: `
+        {
+          "@context": "http://schema.org",
+          "@type": "Organization",
+          "name": "${name}",
+          "url": "${url}",
+          "logo": "${logo}",
+          "sameAs" : [
+            "https://twitter.com/...",
+            "https://vk.com/...",
+            "https://www.facebook.com/...",
+            "https://instagram.com/..."
+          ]
+        }
+      `
+    }
+  ]}
+/>
+```
+
+We make it a bit cleaner:
+
+*bulletproof-react-helmet*
+```js
+import BulletproofHelmet, {composeSchema} from 'bulletproof-react-helmet-es6'
+
+// ....
+
+<BulletproofHelmet
+  schemas={[
+    composeSchema('Organization', {
+      name: name,
+      url: url,
+      logo: logo,
+      sameAs: [
+        'https://twitter.com/...',
+        // ...
+      ]
+    })
+  ]}
+/>
+```
+
+Both this ways are yeilds same result:
+
+```html
+<script name="WebSite" type="application/ld+json" data-react-helmet="true">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "...",
+  "url": "...",
+  "logo": "...",
+  "sameAs" : [
+    "https://twitter.com/...",
+    "https://vk.com/...",
+    "https://www.facebook.com/...",
+    "https://instagram.com/..."
+  ]
+}
+</script>
+```
+
+In addition `Organization` and `WebSite` schemas as most popular (can be used on any single website) provided with shortcuts:
+
+```js
+<BulletproofHelmet
+  company={{
+    name: ...,
+  }}
+  website={{
+    name: ...,
+    url: ...,
+  }}
+/>
+```
+
+
+
+
+You could also specify image size:
+```js
+<BulletproofHelmet openGraph={{imageWidth: ..., imageHeight: ...}} />
+```
+But we recomed just use 1200x630 for gorgeous retina-ready images in all social networks and devices
+
+

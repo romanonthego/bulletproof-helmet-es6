@@ -6,9 +6,9 @@ import websiteSchema from './utils/schemas/website'
 
 export default class BulletproofHelmet extends PureComponent {
   static propTypes = {
-    // baseURL: PropTypes.string.isRequired,
+    url: PropTypes.string,
     title: PropTypes.string,
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string,
     image: React.PropTypes.string,
     url: React.PropTypes.string,
 
@@ -48,6 +48,7 @@ export default class BulletproofHelmet extends PureComponent {
 
     // socials
     openGraph: PropTypes.shape({
+      url: PropTypes.string,
       title: PropTypes.string,
       description: PropTypes.string,
       image: PropTypes.string,
