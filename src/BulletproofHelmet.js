@@ -30,6 +30,7 @@ export default class BulletproofHelmet extends PureComponent {
     // favicons etc
     appleTouchIconsRoot: PropTypes.string,
     chromeIconsRoot: PropTypes.string,
+    msTileIconsRoot: PropTypes.string,
     faviconsManifestUrl: PropTypes.string,
 
     // rest - ms tile colors, verifications etc
@@ -155,12 +156,14 @@ export default class BulletproofHelmet extends PureComponent {
     const {
       appleTouchIconsRoot,
       chromeIconsRoot,
+      // msTileIconsRoot,
       faviconsManifestUrl,
     } = this.props
 
     return [
       ...(appleTouchIconsRoot ? this.buildAppleTouchIcons() : []),
       ...(chromeIconsRoot ? this.buildChromeIcons() : []),
+      // ...(msTileIconsRoot ? this.buildMsTileIcons() : []),
       (faviconsManifestUrl ? {rel: 'manifest', href: `${faviconsManifestUrl}`} : null),
     ].filter(l => l !== null)
   }
@@ -171,21 +174,21 @@ export default class BulletproofHelmet extends PureComponent {
     } = this.props
 
     const sizesList = [
-      '57x57',
-      '60x60',
-      '72x72',
-      '76x76',
-      '114x114',
-      '120x120',
-      '144x144',
-      '152x152',
-      '180x180',
+      57,
+      60,
+      72,
+      76,
+      114,
+      120,
+      144,
+      152,
+      180,
     ]
 
     return sizesList.map(s => ({
       rel: 'apple-touch-icon',
-      sizes: s,
-      href: `${appleTouchIconsRoot}/apple-touch-icon-${s}.png`
+      sizes: `${s}x${s}`,
+      href: `${appleTouchIconsRoot}apple-touch-icon-${s}x${s}.png`,
     }))
   }
 
@@ -194,13 +197,30 @@ export default class BulletproofHelmet extends PureComponent {
       chromeIconsRoot,
     } = this.props
 
-    return [
-      {rel: 'icon', type: 'image/png', sizes: '16x16', href: `${chromeIconsRoot}/favicon-16x16.png`},
-      {rel: 'icon', type: 'image/png', sizes: '32x32', href: `${chromeIconsRoot}/favicon-32x32.png`},
-      {rel: 'icon', type: 'image/png', sizes: '96x96', href: `${chromeIconsRoot}/favicon-96x96.png`},
-      {rel: 'icon', type: 'image/png', sizes: '192x192', href: `${chromeIconsRoot}/android-chrome-192x192.png`},
+    const sizesList = [
+      144,
+      192,
+      36,
+      48,
+      72,
+      96,
     ]
+
+    return sizesList.map(s => ({
+      rel: 'icon',
+      type: 'image/png',
+      sizes: `${s}x${s}`,
+      href: `${chromeIconsRoot}android-chrome-${s}x${s}.png`,
+    }))
   }
+
+  // buildMsTileIcons() {
+  //   const {
+  //     msTileIconsRoot,
+  //   } = this.props
+
+
+  // }
 
   buildScript() {
     const {
