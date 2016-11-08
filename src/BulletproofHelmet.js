@@ -143,7 +143,7 @@ export default class BulletproofHelmet extends PureComponent {
     return [
       metaOrNull('og:title', title || this.props.title),
       metaOrNull('og:description', description || this.props.description),
-      metaOrNull('og:image', image || this.props.image)
+      metaOrNull('og:image', image || this.props.image),
       metaOrNull('og:image:width', imageWidth, image || this.props.image),
       metaOrNull('og:image:height', imageHeight, image || this.props.image),
       metaOrNull('og:type', type),
