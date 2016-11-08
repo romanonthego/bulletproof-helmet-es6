@@ -1,6 +1,6 @@
 import React, {PureComponent, PropTypes} from 'react'
 import Helmet from 'react-helmet'
-import metaOrNull from '.utils/metaOrNull'
+import metaOrNull from './utils/metaOrNull'
 import companySchema from './utils/schemas/company'
 import websiteSchema from './utils/schemas/website'
 
