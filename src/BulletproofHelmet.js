@@ -159,8 +159,8 @@ export default class BulletproofHelmet extends PureComponent {
     } = this.props
 
     return [
-      ...(appleTouchIconsRoot ? this.buildAppleTouchIcons : []),
-      ...(chromeIconsRoot ? this.buildChromeIcons : []),
+      ...(appleTouchIconsRoot ? this.buildAppleTouchIcons() : []),
+      ...(chromeIconsRoot ? this.buildChromeIcons() : []),
       (faviconsManifestUrl ? {rel: 'manifest', href: `${faviconsManifestUrl}`} : null),
     ].filter(l => l !== null)
   }
