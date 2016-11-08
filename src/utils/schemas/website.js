@@ -8,9 +8,7 @@ export default function websiteSchema(website) {
     searchUrl,
   } = website
 
-  return composeSchema('website', stringify({
-    '@context': 'http://schema.org',
-    '@type' : 'WebSite',
+  return composeSchema('WebSite', {
     name,
     url,
     ...(alternateName ? {alternateName} : {}),
@@ -21,5 +19,5 @@ export default function websiteSchema(website) {
         'query-input': 'required name=search_term_string'
       }
     } : {})
-  }))
+  })
 }
