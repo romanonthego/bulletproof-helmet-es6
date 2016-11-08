@@ -1,5 +1,5 @@
 {
-  "name": "bulletproof-helmet-es6",
+  "name": "bulletproof-react-helmet-es6",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/romanonthego/bulletproof-helmet-es6.git"
+    "url": "git+https://github.com/romanonthego/bulletproof-react-helmet-es6.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/romanonthego/bulletproof-helmet-es6/issues"
+    "url": "https://github.com/romanonthego/bulletproof-react-helmet-es6/issues"
   },
-  "homepage": "https://github.com/romanonthego/bulletproof-helmet-es6#readme",
+  "homepage": "https://github.com/romanonthego/bulletproof-react-helmet-es6#readme",
   "dependencies": {
     "react": "^15.3.2",
     "react-helmet": "^3.2.1",
