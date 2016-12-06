@@ -12,6 +12,6 @@ export default function companySchema(company) {
     name,
     url,
     logo,
-    ...(sameAs.length ? {sameAs: sameAs.map(s => `"${s}"`).join(', ')} : {})
+    ...(sameAs && sameAs.length ? {sameAs} : {})
   })
 }
