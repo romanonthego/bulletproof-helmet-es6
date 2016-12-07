@@ -3,6 +3,7 @@ import Helmet from 'react-helmet'
 import metaOrNull from './utils/metaOrNull'
 import companySchema from './utils/schemas/company'
 import websiteSchema from './utils/schemas/website'
+import breadcrumbsSchema from './utils/schemas/breadcrumbs'
 
 export default class BulletproofHelmet extends PureComponent {
   static propTypes = {
@@ -26,6 +27,13 @@ export default class BulletproofHelmet extends PureComponent {
       logo: PropTypes.string.isRequired,
       sameAs: PropTypes.arrayOf(PropTypes.string),
     }),
+    breadcrumbs: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        image: PropTypes.string,
+      })
+    ),
 
     // favicons etc
     appleTouchIconsRoot: PropTypes.string,
@@ -227,11 +235,13 @@ export default class BulletproofHelmet extends PureComponent {
       schemas,
       website,
       company,
+      breadcrumbs,
     } = this.props
 
     return [
       (company ? companySchema(company) : null),
       (website ? websiteSchema(website) : null),
+      (breadcrumbs ? breadcrumbsSchema(breadcrumbs) : null),
       ...schemas,
     ].filter(schema => schema !== null)
   }

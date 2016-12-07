@@ -2,14 +2,16 @@ export function stringify(schemaObj = {}) {
   return JSON.stringify(schemaObj, null, '  ')
 }
 
-export default function compose(type, schemaObj, opts = {skipContext: false}) {
+export default function compose(type, schemaObj, opts = {nested: false}) {
   const {
-    skipContext
+    nested
   } = opts
 
-  return stringify({
-    ...(!skipContext ? {'@context': 'http://schema.org'} : {}),
+  const schema = {
+    ...(!nested ? {'@context': 'http://schema.org'} : {}),
     '@type': type,
     ...schemaObj,
-  })
+  }
+
+  return nested ? schema : stringify(schema)
 }
