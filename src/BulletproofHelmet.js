@@ -11,8 +11,8 @@ export default class BulletproofHelmet extends PureComponent {
     url: PropTypes.string,
     title: PropTypes.string,
     description: PropTypes.string,
-    image: React.PropTypes.string,
-    url: React.PropTypes.string,
+    image: PropTypes.string,
+    url: PropTypes.string,
 
     // schema.org schemas.
     schemas: PropTypes.arrayOf(PropTypes.string),
